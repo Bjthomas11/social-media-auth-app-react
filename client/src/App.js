@@ -16,6 +16,7 @@ import { themeSettings } from "theme";
 const App = () => {
   const mode = useSelector((state) => state.mode); // get mode from redux store
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]); // create theme based on mode
+  const isAuth = useSelector((state) => state.token); // get isAuth from redux store
 
   return (
     <div className="app">
@@ -24,8 +25,14 @@ const App = () => {
           <CssBaseline />
           <Routes>
             <Route path="/" element={<Login />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/profile/:userId" element={<Profile />} />
+            <Route
+              path="/home"
+              element={isAuth ? <Home /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/profile/:userId"
+              element={isAuth ? <Profile /> : <Navigate to="/" />}
+            />
           </Routes>
         </ThemeProvider>
       </Router>
